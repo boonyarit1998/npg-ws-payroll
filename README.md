@@ -17,16 +17,11 @@ DELETE  /api/v1/exchange-rates/{date}
 
 # Payroll
 POST   /api/v1/payrolls/calculate
-POST   /api/v1/payrolls/process
 GET    /api/v1/payrolls
-GET    /api/v1/payrolls/{id}
-GET    /api/v1/payrolls/{id}/items
-GET    /api/v1/payrolls/{id}/payslip/{employeeId}
+GET    /api/v1/payrolls/{month}
+GET    /api/v1/payrolls/employeeId/{employeeId}
+GET    /api/v1/payrolls/employeeId/{employeeId}/{month}
 
-# Reports
-GET    /api/v1/reports/monthly-summary
-GET    /api/v1/reports/currency-exposure
-GET    /api/v1/reports/export
 ```
 
 ## 💻 ตัวอย่าง Code Structure
@@ -43,9 +38,7 @@ src/main/java/com/company/payroll/
 ├── service/
 │   ├── EmployeeService.java
 │   ├── PayrollService.java
-│   ├── ExchangeRateService.java
-│   ├── PayslipService.java
-│   └── NotificationService.java
+│   └── ExchangeRateService.java
 ├── repository/
 │   ├── EmployeeRepository.java
 │   ├── PayrollRepository.java
@@ -53,7 +46,6 @@ src/main/java/com/company/payroll/
 ├── model/
 │   ├── Employee.java
 │   ├── Payroll.java
-│   ├── PayrollItem.java
 │   └── ExchangeRate.java
 ├── dto/
 │   ├── EmployeeDTO.java

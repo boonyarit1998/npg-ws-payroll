@@ -19,13 +19,16 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //รหัสพนักงาน
     @Column(nullable = false,unique = true,length = 5)
     private Long employeeId;
 
+    //ชื่อจริง
     @NotBlank(message = "First name is required")
     @Column(nullable = false,length = 255)
     private String firstName;
 
+    //นามสกุล
     @NotBlank(message = "Last name is required")
     @Column(nullable = false,length = 255)
     private String lastName;

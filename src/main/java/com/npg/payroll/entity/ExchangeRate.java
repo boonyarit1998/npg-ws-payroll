@@ -18,11 +18,16 @@ public class ExchangeRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //THB
     private String fromCurrency;
+
+    //USD,...
     private String toCurrency;
-    private LocalDate localDate;
+
+    //วันที่ระบุอัตราแลกเปลี่ยน
     private String date;
 
+    //อัตราเเลกเปลี่ยน
     @Column(precision = 15,scale = 2)
     private BigDecimal rate;
 }

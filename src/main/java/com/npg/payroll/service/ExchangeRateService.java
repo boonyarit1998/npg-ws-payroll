@@ -1,7 +1,6 @@
 package com.npg.payroll.service;
 
 import com.npg.payroll.entity.ExchangeRate;
-import com.npg.payroll.repository.EmployeeRepository;
 import com.npg.payroll.repository.ExchangeRateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
