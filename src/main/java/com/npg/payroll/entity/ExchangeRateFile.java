@@ -21,6 +21,8 @@ public class ExchangeRateFile {
 
     private String exchangeRateFileDate;
 
+    private LocalDateTime exchangeRateFileDateTime;
+
     private String exchangeRateFileName;
 
     private String recordStatus;

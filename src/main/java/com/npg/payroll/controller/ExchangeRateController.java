@@ -1,8 +1,10 @@
 package com.npg.payroll.controller;
 
+import com.npg.payroll.dto.UploadExchangeRateRequest;
 import com.npg.payroll.entity.ExchangeRate;
 import com.npg.payroll.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +16,9 @@ public class ExchangeRateController {
     private final ExchangeRateService exchangeRateService;
 
     @PostMapping()
-    public List<ExchangeRate> uploadExchangeRate(String filename,String base64Data) throws Exception{
-        List<ExchangeRate> newExchangRate = exchangeRateService.upload(filename,base64Data);
-        return newExchangRate;
+    public ResponseEntity<List<ExchangeRate>> uploadExchangeRate(@RequestBody UploadExchangeRateRequest request) throws Exception{
+        List<ExchangeRate> newExchangRate = exchangeRateService.uploadExchangeRate(request.getFilename(),request.getBase64Data());
+        return ResponseEntity.ok().body(newExchangRate);
     }
 
     @GetMapping()
@@ -26,8 +28,8 @@ public class ExchangeRateController {
     }
 
     @GetMapping("/{date}")
-    public ExchangeRate getExchangeRateByDate(@PathVariable String date) throws Exception{
-        ExchangeRate exchangeRate = exchangeRateService.getExchangRateByDate(date);
+    public List<ExchangeRate> getExchangeRateByDate(@PathVariable String date) throws Exception{
+        List<ExchangeRate> exchangeRate = exchangeRateService.getExchangRateByDate(date);
         return  exchangeRate;
     }
 
