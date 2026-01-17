@@ -46,11 +46,12 @@ public class ExchangeRateService {
             throw new UploadFileException("upload file error");
         }
 
-        ExchangeRateFile Duplicate = exchangeRateFileRepository.exchangeRateFileDateRecordA(dateFile);
+        ExchangeRateFile Duplicate = exchangeRateFileRepository.fileExchangeRateFileDateRecordA(dateFile);
 
-        
+
         //เช็คไฟลล์ซ้ำ
-        if (Duplicate != null){
+        //1.กรณีซ้ำแล้วต้องการ update record_status เป็น D
+        /*if (Duplicate != null){
 
             exchangeRateRepository.updateAllExchangeRateByFileID(Duplicate.getId());
 
@@ -58,7 +59,18 @@ public class ExchangeRateService {
             Duplicate.setUpdateBy("SYSTEM");
             Duplicate.setUpdateDate(currenDateTime);
             exchangeRateFileRepository.save(Duplicate);
+        }*/
+
+        //2.กรณีซ้ำแล้วต้องการลบของเดิมออก
+        if(Duplicate != null){
+
+            List<Long> ids = exchangeRateRepository.findByExchangeRateFileId(Duplicate.getId()).stream().map(ExchangeRate::getId).toList();
+            exchangeRateRepository.deleteAllById(ids);
+            exchangeRateFileRepository.deleteById(Duplicate.getId());
+
         }
+
+
 
         //กรณีไม่ซ้ำเพิ่มใหม่
         ExchangeRateFile exchangeRateFile = ExchangeRateFile.builder()
@@ -112,26 +124,32 @@ public class ExchangeRateService {
         return exchangeRateList;
     }
 
+    public List<ExchangeRateFile> getAllFileExchangeRate() throws  Exception {
+        List<ExchangeRateFile> exchangeRateList = exchangeRateFileRepository.findAllExchangeRateFileRecordA();
+        return exchangeRateList;
+    }
+
     public List<ExchangeRate> getExchangRateByDate(String date) throws  Exception {
-        ExchangeRateFile exchangeRateFile = exchangeRateFileRepository.exchangeRateFileDateRecordA(date);
+        ExchangeRateFile exchangeRateFile = exchangeRateFileRepository.fileExchangeRateFileDateRecordA(date);
         List<ExchangeRate> exchangeRate = exchangeRateRepository.findByExchangeRateFileId(exchangeRateFile.getId());
         return exchangeRate;
     }
 
-    public void deleteExchangRate(String date) throws Exception{
+    public boolean deleteExchangRate(String date) throws Exception{
         //หาไฟล์ Exchange ตาม date
-        ExchangeRateFile exchangeRateFile = exchangeRateFileRepository.exchangeRateFileDateRecordA(date);
+        ExchangeRateFile exchangeRateFile = exchangeRateFileRepository.fileExchangeRateFileDateRecordA(date);
         //หาไม่เจอ return
         if(exchangeRateFile == null){
-            return;
+
         }
         //เตรียม id สำหรับลบข้อมูล
         List<Long> ids= exchangeRateRepository.findByExchangeRateFileId(exchangeRateFile.getId()).stream().map(ExchangeRate::getId).toList();
         if(!ids.isEmpty()){
             exchangeRateRepository.deleteAllById(ids);
+            exchangeRateFileRepository.deleteById(exchangeRateFile.getId());
         }
         //ลบ ExchangeRateFile
-        exchangeRateFileRepository.deleteById(exchangeRateFile.getId());
+        return  true ;
     }
 
     public String getStringFromFileName(String filename){
